@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Barspillet</title>
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  text-align: center;
+  color: #333;
+}
+
+h1 { margin-bottom: 10px; }
+
+button {
+  background-color: #ff7b00;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease;
+}
+
+button:hover { background-color: #ff9800; }
+
+.steps {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: left;
+  max-width: 400px;
+}
+
+.controls {
+  margin-top: 25px;
+  display: none;
+  gap: 15px;
+}
+
+.controls button { background-color: #4caf50; }
+
+.controls button:last-child { background-color: #2196f3; }
+
+.controls button:hover { opacity: 0.9; }
+
+#drink-name {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+input.correct { background-color: #c8e6c9; }
+input.wrong { background-color: #ffcdd2; }
+</style>
+</head>
+
+<body>
+<h1>🍹 Barspillet 🍸</h1>
+<h2 id="drink-name">Tryk på Start!</h2>
+
+<div class="steps" id="steps"></div>
+
+<button id="start-btn" onclick="startGame()">Start!</button>
+
+<div class="controls" id="controls">
+  <button id="check-btn">✔️ Klar</button>
+  <button id="new-btn" onclick="showRandomDrink()">🔄 Ny drink</button>
+  <button id="show-answer-btn">📖 Facit</button>
+</div>
+
+<script>
+let drinks = {
+   "Gin Hass": [["Glas:", "Highball"], ["4 cl", "gin"], ["2 cl", "lime"], ["Top med", "lemonsoda"], ["2‑3 cl", "Mangosirup"]],
+      "Aperol Spritz": [["Glas:", "Hvidvinsglas"], ["6 cl", "Aperol"], ["10 cl", "Cava Brut"], ["Top med", "et splash danskvand"]],
+      "Dark'n Stormy": [["Glas:", "Highball"], ["2 cl", "lime"], ["Top næsten med", "ginger beer"], ["4 cl", "mørk rom"], ["2 dash", "angustura"]],
+      "Bramble": [["Glas:", "Rocks"], ["2 cl", "citron"], ["1 cl", "sukkersirup"], ["2 cl", "gin"], "knust is i glasset", ["Top med et splash", "danskvand"], ["2‑3 cl", "brombærlikør"]],
+      "Piña Colada": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["4 cl", "lys rom"], ["2 cl", "kokossirup"], ["2 cl", "fløde"], ["10 cl", "ananasjuice"]],
+      "Rosemary Tom Collins": [["Glas:", "Highball"], "Skal shakes", "En kvist rosmarin", ["4 cl", "gin"], ["4 cl", "citron"], ["2 cl", "sukkersirup"], "Dobbelt straines i glas med frisk is", ["Toppes med", "danskvand"]],
+      "Cosmopolitan": [["Glas:", "Cocktailglas"], "Skal shakes", ["3 cl", "vodka"], ["2 cl", "Cointreau"], ["2 cl", "lime"], ["1 cl", "sukkersirup"], ["8 cl", "tranebærjuice"], "Dobbelt strain i glas"],
+      "Whisky Sour": [["Glas:", "Rocks"], "Skal dry shakes", ["5 cl", "Whisky"], ["3 cl", "citron"], ["2 cl", "sukkersirup"], ["2 cl", "æggehvide"], "Shake med is", "Strain i glas med frisk is"],
+      "Old Fashioned": [["Glas:", "Rocks"], "Skal røres", ["2 tsk", "sukker"], ["2 dash", "angustura"], ["6 cl", "Whisky"], "Is", "Omrør (ca 25sek)", ["Et splash", "danskvand"]],
+      "Mojito": [["Glas:", "Highball"], ["2 tsk", "sukker"], ["1/2", "lime"], ["1 cl", "sukkersirup"], ["1 cl", "hylde sirup"], "Mortes", "10 klappede mynteblade", "Knust is i glasset", ["4 cl", "lys rom"], ["Top med", "danskvand"], "Omrør"],
+      "Espressotini": [["Glas:", "Cocktailglas"], "Skal shakes", ["1", "espressoshot"], ["2 cl", "vodka"], ["1 cl", "karamelsirup"], ["4 cl", "Kaffelikør"], "Straines"],
+      "Irsk Kaffe": [["Glas:", "Hvidvinsglas"], ["2 tsk", "brun farin"], ["4 cl", "Whiskey"], ["1 kop", "kaffe"], ["Top med", "flødeskum"], ["Få dryp", "Kaffelikør"]],
+      "Fransk Kaffe": [["Glas:", "Hvidvinsglas"], ["1 tsk", "brun farin"], ["4 cl", "Cointreau"], ["1 kop", "kaffe"], ["Top med", "flødeskum"]],
+      "Mexicansk Kaffe": [["Glas:", "Hvidvinsglas"], ["2 tsk", "mørk chokolade"], ["4 cl", "Tequila"], ["1 kop", "kaffe"], ["Top med", "flødeskum"], ["Få dryp", "Kaffelikør"]],
+      "Hyldeblomstcocktail": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["2 cl", "gin"], ["2 cl", "citron"], ["4 cl", "hyldeblomstlikør"], ["1 cl", "hyldeblomstsirup"], "Dobbelt strain i glas med knust is", ["Top med", "Cava, Semi seco"]],
+      "Peach'n passion punch": [["Glas:", "Hvidvinsglas"], ["4 cl", "hvid rom"], ["3 cl", "ferskensirup"], ["1 cl", "passionsfrugtsirup"], ["2 cl", "lime"], "Omrør i glasset", ["Top med", "danskvand"]],
+      "Limoncello sunset": [["Glas:", "Rocks"], ["4 cl", "limoncello"], ["2 cl", "citron"], ["1 cl", "tripel sec"], "Knust is halvt fuldt i glasset", ["Tom næsten med", "appelsinjuice"], ["2 cl", "campari"]],
+      "Passion Martini": [["Glas:", "Cocktailglas"], "Skal shakes", ["4 cl", "vodka"], ["3 cl", "passionsfrugtsirup"], ["2 cl", "vaniljesirup"], ["2 cl", "citron"], "Dobbelstraines", ["Toppes med", "Cava Semi Seco"]],
+      "Devil's Kiss": [["Glas:", "Cocktailglas"], "Væd glasset med limebåd", "Drys 1 tsk sukker i glasset", "Skil af med det overskydende", "Tilsæt 1 tsk absint og antænd", "Slyng ild i 5‑10 sek og karamellisere glasset", "Skal shakes", ["4 cl", "vodka"], ["2 cl", "jordbærsirup"], ["2 cl", "grenadine"], ["2 cl", "lime"], ["5 cl", "ananas juice"], "Straines i glasset"],
+      "Vejlefjord Negroni": [["Glas:", "Rocks"], "Skal røres", ["3 cl", "Appelsin Espresso Gin"], ["4 cl", "Rød vermouth"], ["3 cl", "Campari"], "Omrør i 20 sek"],
+      "Mango Madness": [["Glas:", "Highball"], ["1 cl", "ingefærshot"], ["3 cl", "Mangosirup"], ["Top med", "lemonsodavand"]],
+      "Virgin Mojito": [["Glas:", "Highball"], ["2 tsk", "sukker"], ["1/2", "lime"], ["1 cl", "sukkersirup"], ["1 cl", "ingefærsirup"], ["2 cl", "hyldeblomstsirup"], "Mortes", "10 klappede mynteblade", "Knust is i glasset", ["Top med", "danskvand"], "Omrør"],
+      "Not so Bramble": [["Glas:", "Rocks"], ["2 cl", "lime"], ["2 cl", "hyldeblomstsirup"], ["1 cl", "ingefærsirup"], "knust is i glasset", ["Top med", "et splash danskvand"], ["2‑3 cl", "brombærsirup"]],
+      "Virgin piña colada": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["12 cl", "ananasjuice"], ["1 cl", "citron"], ["3 cl", "kokossirup"], ["2 cl", "fløde"]],
+      "Peach Dream": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["3 cl", "ferskensirup"], ["2 cl", "appelsinsirup"], ["4 cl", "lime"], ["Top med", "danskvand"]]
+    };
+
+let currentSteps = [];
+
+function startGame() {
+  document.getElementById("start-btn").style.display = "none";
+  document.getElementById("controls").style.display = "flex";
+  showRandomDrink();
+}
+
+function showRandomDrink() {
+  const names = Object.keys(drinks);
+  const randomName = names[Math.floor(Math.random() * names.length)];
+  const steps = drinks[randomName];
+  currentSteps = steps;
+
+  document.getElementById("drink-name").textContent = randomName;
+
+  const stepsDiv = document.getElementById("steps");
+  stepsDiv.innerHTML = steps.map((step, i) => {
+    if (Array.isArray(step) && step.length === 2) {
+      return `<p>${step[0]} <input type="text" id="guess-${i}" /></p>`;
+    } else {
+      return `<p>${step}</p>`;
+    }
+  }).join("");
+
+  steps.forEach((step, i) => {
+    if (Array.isArray(step) && step.length === 2) {
+      const inp = document.getElementById(`guess-${i}`);
+      if (inp) inp.classList.remove("correct", "wrong");
+    }
+  });
+
+  const oldRes = document.getElementById("result");
+  if (oldRes) oldRes.remove();
+}
+
+document.getElementById("check-btn").addEventListener("click", () => {
+  // Map correct ingredients by quantity
+  let quantityMap = {};
+  currentSteps.forEach(step => {
+    if (Array.isArray(step) && step.length === 2) {
+      if (!quantityMap[step[0]]) quantityMap[step[0]] = [];
+      quantityMap[step[0]].push(step[1].toLowerCase());
+    }
+  });
+
+  // Map user input by quantity
+  let userMap = {};
+  currentSteps.forEach((step, i) => {
+    if (Array.isArray(step) && step.length === 2) {
+      const input = document.getElementById(`guess-${i}`);
+      const val = input.value.trim().toLowerCase();
+      if (!userMap[step[0]]) userMap[step[0]] = [];
+      if (val) userMap[step[0]].push({val: val, element: input});
+    }
+  });
+
+  // Check each quantity group
+  Object.keys(quantityMap).forEach(qty => {
+    let correctIngredients = [...quantityMap[qty]]; // copy array
+    const userInputs = userMap[qty] || [];
+
+    userInputs.forEach(u => {
+      const index = correctIngredients.indexOf(u.val);
+      if (index !== -1) {
+        u.element.classList.add("correct");
+        u.element.classList.remove("wrong");
+        correctIngredients.splice(index,1);
+      } else {
+        u.element.classList.add("wrong");
+        u.element.classList.remove("correct");
+      }
+    });
+  });
+
+  // Count correct answers
+  let correctCount = 0;
+  currentSteps.forEach((step, i) => {
+    if (Array.isArray(step) && step.length === 2) {
+      const input = document.getElementById(`guess-${i}`);
+      if (input.classList.contains("correct")) correctCount++;
+    }
+  });
+
+  const total = currentSteps.filter(s => Array.isArray(s) && s.length === 2).length;
+  const resultDiv = document.getElementById("result") || document.createElement("p");
+  resultDiv.id = "result";
+  resultDiv.textContent = `Du havde ${correctCount} ud af ${total} rigtige!`;
+  document.getElementById("steps").appendChild(resultDiv);
+});
+
+// Facit-knap
+document.getElementById("show-answer-btn").addEventListener("click", () => {
+  currentSteps.forEach((step, i) => {
+    if (Array.isArray(step) && step.length === 2) {
+      const input = document.getElementById(`guess-${i}`);
+      input.value = step[1]; // set correct answer
+      input.classList.add("correct");
+      input.classList.remove("wrong");
+    }
+  });
+
+  const total = currentSteps.filter(s => Array.isArray(s) && s.length === 2).length;
+  const resultDiv = document.getElementById("result") || document.createElement("p");
+  resultDiv.id = "result";
+  resultDiv.textContent = `Her er facit: ${total} rigtige`;
+  document.getElementById("steps").appendChild(resultDiv);
+});
+</script>
+</body>
+</html>
