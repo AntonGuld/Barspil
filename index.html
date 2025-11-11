@@ -82,8 +82,8 @@ input.wrong { background-color: #ffcdd2; }
 
 <script>
 let drinks = {
-   "Gin Hass": [["Glas:", "Highball"], ["4 cl", "gin"], ["2 cl", "lime"], ["Top med", "lemonsoda"], ["2‑3 cl", "Mangosirup"]],
-      "Aperol Spritz": [["Glas:", "Hvidvinsglas"], ["6 cl", "Aperol"], ["10 cl", "Cava Brut"], ["Top med", "et splash danskvand"]],
+   "Gin Hass": [["Glas:", "Highball"], ["4 cl", "gin"], ["2 cl", "lime"], ["Top med", "lemonsodavand"], ["2‑3 cl", "Mangosirup"]],
+      "Aperol Spritz": [["Glas:", "Hvidvinsglas"], ["6 cl", "Aperol"], ["10 cl", "Cava Brut"], ["Top med et splash", "danskvand"]],
       "Dark'n Stormy": [["Glas:", "Highball"], ["2 cl", "lime"], ["Top næsten med", "ginger beer"], ["4 cl", "mørk rom"], ["2 dash", "angustura"]],
       "Bramble": [["Glas:", "Rocks"], ["2 cl", "citron"], ["1 cl", "sukkersirup"], ["2 cl", "gin"], "knust is i glasset", ["Top med et splash", "danskvand"], ["2‑3 cl", "brombærlikør"]],
       "Piña Colada": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["4 cl", "lys rom"], ["2 cl", "kokossirup"], ["2 cl", "fløde"], ["10 cl", "ananasjuice"]],
@@ -91,22 +91,22 @@ let drinks = {
       "Cosmopolitan": [["Glas:", "Cocktailglas"], "Skal shakes", ["3 cl", "vodka"], ["2 cl", "Cointreau"], ["2 cl", "lime"], ["1 cl", "sukkersirup"], ["8 cl", "tranebærjuice"], "Dobbelt strain i glas"],
       "Whisky Sour": [["Glas:", "Rocks"], "Skal dry shakes", ["5 cl", "Whisky"], ["3 cl", "citron"], ["2 cl", "sukkersirup"], ["2 cl", "æggehvide"], "Shake med is", "Strain i glas med frisk is"],
       "Old Fashioned": [["Glas:", "Rocks"], "Skal røres", ["2 tsk", "sukker"], ["2 dash", "angustura"], ["6 cl", "Whisky"], "Is", "Omrør (ca 25sek)", ["Et splash", "danskvand"]],
-      "Mojito": [["Glas:", "Highball"], ["2 tsk", "sukker"], ["1/2", "lime"], ["1 cl", "sukkersirup"], ["1 cl", "hylde sirup"], "Mortes", "10 klappede mynteblade", "Knust is i glasset", ["4 cl", "lys rom"], ["Top med", "danskvand"], "Omrør"],
+      "Mojito": [["Glas:", "Highball"], ["2 tsk", "sukker"], ["1/2", "lime"], ["1 cl", "sukkersirup"], ["1 cl", "hyldeblomstsirup"], "Mortes", "10 klappede mynteblade", "Knust is i glasset", ["4 cl", "lys rom"], ["Top med", "danskvand"], "Omrør"],
       "Espressotini": [["Glas:", "Cocktailglas"], "Skal shakes", ["1", "espressoshot"], ["2 cl", "vodka"], ["1 cl", "karamelsirup"], ["4 cl", "Kaffelikør"], "Straines"],
       "Irsk Kaffe": [["Glas:", "Hvidvinsglas"], ["2 tsk", "brun farin"], ["4 cl", "Whiskey"], ["1 kop", "kaffe"], ["Top med", "flødeskum"], ["Få dryp", "Kaffelikør"]],
       "Fransk Kaffe": [["Glas:", "Hvidvinsglas"], ["1 tsk", "brun farin"], ["4 cl", "Cointreau"], ["1 kop", "kaffe"], ["Top med", "flødeskum"]],
-      "Mexicansk Kaffe": [["Glas:", "Hvidvinsglas"], ["2 tsk", "mørk chokolade"], ["4 cl", "Tequila"], ["1 kop", "kaffe"], ["Top med", "flødeskum"], ["Få dryp", "Kaffelikør"]],
-      "Hyldeblomstcocktail": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["2 cl", "gin"], ["2 cl", "citron"], ["4 cl", "hyldeblomstlikør"], ["1 cl", "hyldeblomstsirup"], "Dobbelt strain i glas med knust is", ["Top med", "Cava, Semi seco"]],
-      "Peach'n passion punch": [["Glas:", "Hvidvinsglas"], ["4 cl", "hvid rom"], ["3 cl", "ferskensirup"], ["1 cl", "passionsfrugtsirup"], ["2 cl", "lime"], "Omrør i glasset", ["Top med", "danskvand"]],
-      "Limoncello sunset": [["Glas:", "Rocks"], ["4 cl", "limoncello"], ["2 cl", "citron"], ["1 cl", "tripel sec"], "Knust is halvt fuldt i glasset", ["Tom næsten med", "appelsinjuice"], ["2 cl", "campari"]],
+      "Mexicansk Kaffe": [["Glas:", "Hvidvinsglas"], ["2 stk", "chokolade"], ["4 cl", "Tequila"], ["1 kop", "kaffe"], ["Top med", "flødeskum"], ["Få dryp", "Kaffelikør"]],
+      "Hyldeblomstcocktail": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["2 cl", "gin"], ["2 cl", "citron"], ["4 cl", "hyldeblomstlikør"], ["1 cl", "hyldeblomstsirup"], "Dobbelt strain i glas med knust is", ["Top med", "Cava Semi seco"]],
+      "Peach'n passion punch": [["Glas:", "Hvidvinsglas"], ["4 cl", "lys rom"], ["3 cl", "ferskensirup"], ["1 cl", "passionsfrugtsirup"], ["2 cl", "lime"], "Omrør i glasset", ["Top med", "danskvand"]],
+      "Limoncello sunset": [["Glas:", "Rocks"], ["4 cl", "limoncello"], ["2 cl", "citron"], ["1 cl", "tripel sec sirup"], "Knust is halvt fuldt i glasset", ["Tom næsten med", "appelsinjuice"], ["2 cl", "campari"]],
       "Passion Martini": [["Glas:", "Cocktailglas"], "Skal shakes", ["4 cl", "vodka"], ["3 cl", "passionsfrugtsirup"], ["2 cl", "vaniljesirup"], ["2 cl", "citron"], "Dobbelstraines", ["Toppes med", "Cava Semi Seco"]],
-      "Devil's Kiss": [["Glas:", "Cocktailglas"], "Væd glasset med limebåd", "Drys 1 tsk sukker i glasset", "Skil af med det overskydende", "Tilsæt 1 tsk absint og antænd", "Slyng ild i 5‑10 sek og karamellisere glasset", "Skal shakes", ["4 cl", "vodka"], ["2 cl", "jordbærsirup"], ["2 cl", "grenadine"], ["2 cl", "lime"], ["5 cl", "ananas juice"], "Straines i glasset"],
+      "Devil's Kiss": [["Glas:", "Cocktailglas"], "Væd glasset med limebåd", "Drys 1 tsk sukker i glasset", "Skil af med det overskydende", "Tilsæt 1 tsk absint og antænd", "Slyng ild i 5‑10 sek og karamellisere glasset", "Skal shakes", ["4 cl", "vodka"], ["2 cl", "jordbærsirup"], ["2 cl", "grenadine"], ["2 cl", "lime"], ["5 cl", "ananasjuice"], "Straines i glasset"],
       "Vejlefjord Negroni": [["Glas:", "Rocks"], "Skal røres", ["3 cl", "Appelsin Espresso Gin"], ["4 cl", "Rød vermouth"], ["3 cl", "Campari"], "Omrør i 20 sek"],
       "Mango Madness": [["Glas:", "Highball"], ["1 cl", "ingefærshot"], ["3 cl", "Mangosirup"], ["Top med", "lemonsodavand"]],
-      "Virgin Mojito": [["Glas:", "Highball"], ["2 tsk", "sukker"], ["1/2", "lime"], ["1 cl", "sukkersirup"], ["1 cl", "ingefærsirup"], ["2 cl", "hyldeblomstsirup"], "Mortes", "10 klappede mynteblade", "Knust is i glasset", ["Top med", "danskvand"], "Omrør"],
-      "Not so Bramble": [["Glas:", "Rocks"], ["2 cl", "lime"], ["2 cl", "hyldeblomstsirup"], ["1 cl", "ingefærsirup"], "knust is i glasset", ["Top med", "et splash danskvand"], ["2‑3 cl", "brombærsirup"]],
+      "Virgin Mojito": [["Glas:", "Highball"], ["2 tsk", "sukker"], ["1/2", "lime"], ["1 cl", "sukkersirup"], ["1 cl", "ingefærshot"], ["2 cl", "hyldeblomstsirup"], "Mortes", "10 klappede mynteblade", "Knust is i glasset", ["Top med", "danskvand"], "Omrør"],
+      "Not so Bramble": [["Glas:", "Rocks"], ["2 cl", "lime"], ["2 cl", "hyldeblomstsirup"], ["1 cl", "ingefærshot"], "knust is i glasset", ["Top med et splash", "danskvand"], ["2‑3 cl", "brombærsirup"]],
       "Virgin piña colada": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["12 cl", "ananasjuice"], ["1 cl", "citron"], ["3 cl", "kokossirup"], ["2 cl", "fløde"]],
-      "Peach Dream": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["3 cl", "ferskensirup"], ["2 cl", "appelsinsirup"], ["4 cl", "lime"], ["Top med", "danskvand"]]
+      "Peach Dream": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["3 cl", "ferskensirup"], ["2 cl", "tripel sec sirup"], ["4 cl", "lime"], ["Top med", "danskvand"]]
     };
 
 let currentSteps = [];
