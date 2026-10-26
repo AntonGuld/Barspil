@@ -61,14 +61,54 @@ button:hover { background-color: #ff9800; }
   margin-top: 10px;
 }
 
-input.correct { background-color: #c8e6c9; }
-input.wrong { background-color: #ffcdd2; }
+input.correct,
+select.correct {
+  background-color: #c8e6c9;
+}
+
+input.wrong,
+select.wrong {
+  background-color: #ffcdd2;
+}
+
+#extra-drinks-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+}
+
+#extra-drinks-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#extra-drinks-toggle input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
 </style>
 </head>
 
 <body>
 <h1>🍹 Barspillet 🍸</h1>
 <h2 id="drink-name">Tryk på Start!</h2>
+
+<div id="extra-drinks-toggle">
+  <label>
+    <input type="checkbox" id="include-extra-drinks">
+    Inkludér drinks uden for kortet
+  </label>
+</div>
 
 <div class="steps" id="steps"></div>
 
@@ -113,7 +153,7 @@ let drinks = {
 
     let drinks_uden_for_kort = {
       "Virgin piña colada": [["Glas:", "Hvidvinsglas"], "Skal shakes", ["12 cl", "Ananasjuice"], ["1 cl", "Citron"], ["3 cl", "Kokossirup"], ["2 cl", "Fløde"]],
-      "Sazerac": [["Glas:", "Rocks"], "Skal omrøres:", ["6 cl", "Cognac"], ["1 cl", "Sukkersirup"], ["1-2 dash", "Angustura"], "I glas:" ["1-2 sprøjt", "Absint"], "Antænd glasset", "Frisk is i glas", "Drink straines i glasset" ],
+      "Sazerac": [["Glas:", "Rocks"], "Skal omrøres:", ["6 cl", "Cognac"], ["1 cl", "Sukkersirup"], ["1-2 dash", "Angustura"], "I glas:", ["1-2 sprøjt", "Absint"], "Antænd glasset", "Frisk is i glas", "Drink straines i glasset" ],
       "La Mumba": [["Glas:", "Hvidvinsglas"], ["4 cl", "Cognac"], ["1 kop", "Kakao"], ["Toppes med", "Flødeskum"]],
       "Teaquila Sunrise": [["Glas:", "Hvidvinsglas"], ["4 cl", "Tequila"], ["Top med", "Appelsinjuice"], ["3 cl", "Grenadine"]],
       "Negroni": [["Glas:", "Rocks"], "Skal røres", ["2 cl", "Gin"], ["2 cl", "Campari"], ["2 cl", "Rød vermouth"]],
@@ -125,10 +165,10 @@ let drinks = {
       "Americano": [["Glas:", "Rocks"], ["3 cl", "Campari"], ["3 cl", "Rød vermouth"], "Omrør", ["Et splash", "Danskvand"]],
       "French Martini": [["Glas:", "Cocktailglas"], "skal shakes", ["2 cl", "Vodka"], ["1 cl", "Sukkersirup"], ["1 cl", "Solbærsirup"], ["3 cl", "Solbærlikør"], ["8 cl", "Ananasjuice"], "Dobbel straines"],
       "Godmother": [["Glas:", "Rocks"], ["3 cl", "Vodka"], ["3 cl", "Amaretto"], "Omrør"],
-      "Black/ White russian": [["Glas", "Rocks"], ["5 cl", "Vodka"], ["2 cl", "Kaffelikør"], "Omrør", "Ønskes White russian:", "Skal shakes (fif: med fjedder)", ["10 cl", "Mælk"], ["2 cl", "Fløde"], "Strain over Black Russian"],
+      "Black/ White russian": [["Glas:", "Rocks"], ["5 cl", "Vodka"], ["2 cl", "Kaffelikør"], "Omrør", "Ønskes White russian:", "Skal shakes (fif: med fjedder)", ["10 cl", "Mælk"], ["2 cl", "Fløde"], "Strain over Black Russian"],
       "Between the Sheets": [["Glas:", "Cocktailglas"], "Skal shakes", ["3 cl", "Cognac"], ["3 cl", "Cointreau"], ["3 cl", "Lys rom"], ["1 cl", "Citron"], "Dobbelt straines"],
       "Caiprinha": [["Glas:", "Highball"], "Mojito uden mynte:", ["2 tsk", "Sukker"], ["1/2", "Lime"], ["1 cl", "Sukkersirup"], ["1 cl", "Hyldeblomstsirup"], "Mortes", "Knust is i glasset", ["4 cl", "Cachaca rom"], ["Top med", "Danskvand"], "Omrør"],
-      "French Connection": [["Glas", "Rocks"], ["6 cl", "Cognac"], ["3 cl", "Amaretto"], "Omrør"],
+      "French Connection": [["Glas:", "Rocks"], ["6 cl", "Cognac"], ["3 cl", "Amaretto"], "Omrør"],
       "Mudslide": [["Glas:", "Rocks"], "Skal shakes", ["3 cl", "Vodka"], ["3 cl", "Bailey"], ["3 cl", "Kaffelikør"], ["2 cl", "Fløde"]],
       "Rum Punch": [["Glas:", "Highball"], ["4 cl", "Lys rom"], ["5 cl", "Appelsinjuice"], ["1 dash", "Angustura"], ["3 cl", "Sukkersirup"], "Omøres", ["Top med", "Danskvand"], ["1 cl", "Grenadine"]],
       "Anton Speciel (Rabarber Gin Sour)": [["Glas:", "Cocktailglas"], "Skal dry shakes", ["5 cl", "Gin"], ["3 cl", "Rabarbersirup"], ["3 cl", "Citron"], ["2 cl", "Æggehvide"], "Shake med is", "Strain i glas med frisk is"]
@@ -150,9 +190,16 @@ function startGame() {
 }
 
 function showRandomDrink() {
-  const names = Object.keys(drinks);
+  const includeExtra = document.getElementById("include-extra-drinks").checked;
+
+  const drinkPool = includeExtra
+    ? { ...drinks, ...drinks_uden_for_kort }
+    : drinks;
+
+  const names = Object.keys(drinkPool);
   const randomName = names[Math.floor(Math.random() * names.length)];
-  const steps = drinks[randomName];
+  const steps = drinkPool[randomName];
+
   currentSteps = steps;
 
   document.getElementById("drink-name").textContent = randomName;
