@@ -303,12 +303,6 @@ document.getElementById("show-answer-btn").addEventListener("click", () => {
       input.classList.remove("wrong");
     }
   });
-
-  const total = currentSteps.filter(s => Array.isArray(s) && s.length === 2).length;
-  const resultDiv = document.getElementById("result") || document.createElement("p");
-  resultDiv.id = "result";
-  resultDiv.textContent = `Her er facit: ${total} rigtige`;
-  document.getElementById("steps").appendChild(resultDiv);
 });
 </script>
 </body>
