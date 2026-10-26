@@ -6,70 +6,182 @@
 <title>Barspillet</title>
 
 <style>
+/* Grundlæggende layout */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #000F24;
+  color: #C9AD72;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
   margin: 0;
+  padding: 12px 16px 32px;
   text-align: center;
-  color: #C9AD72;
+  overflow-x: hidden;
 }
 
-h1 { margin-bottom: 10px; }
+/* Overskrifter */
+h1 {
+  font-size: clamp(24px, 5vw, 36px);
+  margin: 0 0 6px;
+}
 
+h2 {
+  font-size: clamp(19px, 4vw, 28px);
+  margin: 4px 0 8px;
+}
+
+/* Logo */
+#hotel-logo {
+  display: block;
+  width: min(420px, 78vw, 30dvh);
+  height: auto;
+  object-fit: contain;
+  margin: 4px auto 10px;
+  flex-shrink: 0;
+}
+
+/* Knapper */
 button {
   background-color: #C9AD72;
   color: #000F24;
-  font-size: 18px;
+  font-size: clamp(14px, 2.5vw, 18px);
   border: none;
   border-radius: 10px;
-  padding: 12px 24px;
+  padding: 10px 18px;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   transition: background-color 0.2s ease;
+  max-width: 100%;
 }
 
-button:hover { background-color: #E0C58A; }
+button:hover {
+  background-color: #E0C58A;
+}
 
+/* Ingredienser og instruktioner */
 .steps {
-  margin-top: 20px;
-  font-size: 18px;
-  text-align: left;
+  width: 100%;
   max-width: 400px;
+  margin-top: 8px;
+  font-size: clamp(14px, 2.5vw, 18px);
+  text-align: left;
 }
 
-.controls {
-  margin-top: 25px;
-  display: none;
-  gap: 15px;
+.steps p {
+  margin: 6px 0;
+  line-height: 1.3;
 }
 
-.controls button { background-color: #C9AD72; }
+/* Inputfelter */
+.steps input,
+.steps select {
+  max-width: 100%;
+  min-width: 0;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 5px;
+}
 
-.controls button:last-child { background-color: #C9AD72; }
+.steps input {
+  width: 52%;
+}
 
-.controls button:hover { opacity: 0.9; }
+.steps select {
+  width: auto;
+}
 
+/* Drinkens navn */
 #drink-name {
-  font-size: 28px;
+  font-size: clamp(22px, 5vw, 30px);
   font-weight: bold;
-  margin-top: 10px;
+  margin: 4px 0;
+  overflow-wrap: anywhere;
 }
+
+/* Kontrolknapper */
+.controls {
+  margin-top: 10px;
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.controls button {
+  margin-top: 0;
+  background-color: #C9AD72;
+}
+
+.controls button:hover {
+  opacity: 0.9;
+}
+
+/* Resultat */
+#result {
+  text-align: center;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Kildehenvisning */
 #source-note {
   position: fixed;
-  bottom: 10px;
-  right: 12px;
-  font-size: 11px;
+  bottom: max(6px, env(safe-area-inset-bottom));
+  right: 8px;
+  font-size: clamp(9px, 2.5vw, 11px);
   color: #C9AD72;
   opacity: 0.7;
   margin: 0;
+  z-index: 1001;
+  pointer-events: none;
 }
 
+/* Valg af ekstra drinks */
+#extra-drinks-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: #071A33;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-size: 12px;
+  max-width: calc(100vw - 24px);
+}
+
+#extra-drinks-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+#extra-drinks-toggle input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Korrekte og forkerte svar */
 input.correct,
 select.correct {
   background-color: #244B3B;
@@ -82,38 +194,119 @@ select.wrong {
   color: #FFFFFF;
 }
 
-#extra-drinks-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  background: #071A33;
-  padding: 12px 16px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  font-size: 14px;
+/* Mobiltelefoner */
+@media (max-width: 600px) {
+  body {
+    justify-content: flex-start;
+    padding: 8px 12px 30px;
+    gap: 0;
+  }
+
+  #hotel-logo {
+    width: min(220px, 48vw, 22dvh);
+    margin: 4px auto 6px;
+  }
+
+  h1 {
+    font-size: clamp(22px, 6vw, 30px);
+    margin-bottom: 2px;
+  }
+
+  h2 {
+    font-size: clamp(18px, 5vw, 24px);
+    margin: 2px 0 6px;
+  }
+
+  #drink-name {
+    font-size: clamp(21px, 5.5vw, 27px);
+  }
+
+  #extra-drinks-toggle {
+    position: static;
+    margin: 6px auto;
+    padding: 6px 9px;
+    font-size: 12px;
+    width: fit-content;
+  }
+
+  .steps {
+    margin-top: 4px;
+    font-size: 14px;
+    max-width: 440px;
+  }
+
+  .steps p {
+    margin: 4px 0;
+    line-height: 1.2;
+  }
+
+  .steps input,
+  .steps select {
+    font-size: 16px;
+    padding: 4px;
+  }
+
+  .steps input {
+    width: 48%;
+  }
+
+  button {
+    font-size: 15px;
+    padding: 9px 12px;
+    margin-top: 8px;
+  }
+
+  .controls {
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .controls button {
+    flex: 1 1 auto;
+  }
+
+  #source-note {
+    right: 6px;
+    bottom: max(4px, env(safe-area-inset-bottom));
+    font-size: 9px;
+  }
 }
 
-#extra-drinks-toggle label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
+/* Ekstra lave skærme */
+@media (max-height: 700px) {
+  body {
+    justify-content: flex-start;
+  }
 
-#extra-drinks-toggle input {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
+  #hotel-logo {
+    width: min(220px, 42vw, 20dvh);
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
 
+  h1 {
+    margin-bottom: 2px;
+  }
 
-/* Logoet placeres øverst på siden og tilpasses skærmens bredde. */
-#hotel-logo {
-  display: block;
-  width: min(420px, 78vw);
-  height: auto;
-  margin: 12px auto 18px;
+  #drink-name {
+    margin: 2px 0;
+  }
+
+  .steps {
+    margin-top: 4px;
+  }
+
+  .steps p {
+    margin: 3px 0;
+  }
+
+  button {
+    margin-top: 6px;
+  }
+
+  .controls {
+    margin-top: 6px;
+  }
 }
 
 </style>
