@@ -134,6 +134,13 @@ let drinks = {
       "Anton Speciel (Rabarber Gin Sour)": [["Glas:", "Cocktailglas"], "Skal dry shakes", ["5 cl", "Gin"], ["3 cl", "Rabarbersirup"], ["3 cl", "Citron"], ["2 cl", "Æggehvide"], "Shake med is", "Strain i glas med frisk is"]
     }
 
+const glassTypes = [
+  "Highball",
+  "Hvidvinsglas",
+  "Rocks",
+  "Cocktailglas"
+  ];
+
 let currentSteps = [];
 
 function startGame() {
@@ -152,12 +159,26 @@ function showRandomDrink() {
 
   const stepsDiv = document.getElementById("steps");
   stepsDiv.innerHTML = steps.map((step, i) => {
-    if (Array.isArray(step) && step.length === 2) {
-      return `<p>${step[0]} <input type="text" id="guess-${i}" /></p>`;
-    } else {
-      return `<p>${step}</p>`;
+  if (Array.isArray(step) && step.length === 2) {
+
+    if (step[0] === "Glas:") {
+      return `
+        <p>${step[0]}
+          <select id="guess-${i}">
+            <option value="">Vælg et glas...</option>
+            ${glassTypes.map(glass =>
+              `<option value="${glass}">${glass}</option>`
+            ).join("")}
+          </select>
+        </p>`;
     }
-  }).join("");
+
+    return `<p>${step[0]} <input type="text" id="guess-${i}" /></p>`;
+
+  } else {
+    return `<p>${step}</p>`;
+  }
+}).join("");
 
   steps.forEach((step, i) => {
     if (Array.isArray(step) && step.length === 2) {
